@@ -7,6 +7,7 @@ function TaxiApp(): JSX.Element {
     <SafeAreaView>
       <Text style={style.textBlack}>Hello React Native</Text>
       <Text style={style.textBlue}>Hello React Native</Text>
+      <Text>start</Text>
     </SafeAreaView>
   );
 }
