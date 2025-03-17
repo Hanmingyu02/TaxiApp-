@@ -8,14 +8,17 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useFocusEffect} from '@react-navigation/native';
 import React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function Intro(): JSX.Element {
   console.log('--Into()');
 
   useFocusEffect(
     React.useCallback(() => {
-      setTimeout(() => {
-        let isAutoLogin = false;
+      setTimeout( async () => {
+
+        let userId = await AsyncStorage.getItem('userId');
+        let isAutoLogin = userId ? true : false;
 
         if (isAutoLogin) {
           navigation.push('Main');

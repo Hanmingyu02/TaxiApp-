@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {View} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import {useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function Login(): JSX.Element {
   console.log('--Login()');
@@ -31,7 +32,10 @@ function Login(): JSX.Element {
   };
 
   const gotoMain = () => {
-    navigation.push('Main');
+    AsyncStorage.setItem('userId', userId).then(() => {
+      navigation.push('Main');
+    });
+    // 오류 처리 추가 해주기
   };
 
   return (

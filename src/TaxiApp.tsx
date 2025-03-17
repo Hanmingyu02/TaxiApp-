@@ -7,6 +7,7 @@ import Intro from './Intro';
 import Main from './Main';
 import Login from './Login';
 import Register from './Register';
+import NickNameScreen from './Main_Setting_NickName';
 
 function TaxiApp(): JSX.Element {
   console.log('--TaxiApp()');
@@ -34,6 +35,11 @@ function TaxiApp(): JSX.Element {
         <Stack.Screen
           name="Main"
           component={Main}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="NickName"
+          component={NickNameScreen}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
