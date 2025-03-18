@@ -8,7 +8,10 @@ import {useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {RefreshControl} from 'react-native-gesture-handler';
-import { Modal } from 'react-native';
+import {Modal} from 'react-native';
+import {Alert} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import api from './API';
 
 function Main_List(): JSX.Element {
   console.log('--Main_List()');
@@ -22,25 +25,31 @@ function Main_List(): JSX.Element {
     }, []),
   );
 
-  const requestCallList = () => {
+  const requestCallList = async () => {
     setLoading(true);
+    let userId = (await AsyncStorage.getItem('userId')) || '';
 
-    setTimeout(() => {
-      let tmp: any = [];
-
-      for (var i = 0; i < 10; i++) {
-        let row = {
-          id: i,
-          start_addr: '출발주소',
-          end_addr: '도착주소',
-          call_state: 'REQ',
-        };
-        tmp.push(row);
-      }
-
-      setCallList(tmp);
-      setLoading(false);
-    }, 200);
+    api
+      .list(userId)
+      .then(response => {
+        let {code, message, data} = response.data[0];
+        if (code == 0) {
+          setCallList(data);
+        } else {
+          Alert.alert('오류', message, [
+            {
+              text: '확인',
+              onPress: () => console.log('cancel pressed'),
+              style: 'cancel',
+            },
+          ]);
+        }
+        setLoading(false);
+      })
+      .catch(err => {
+        console.log(JSON.stringify(err));
+        setLoading(false);
+      });
   };
 
   const Header = () => (
@@ -84,12 +93,12 @@ function Main_List(): JSX.Element {
           <RefreshControl refreshing={loading} onRefresh={requestCallList} />
         }></FlatList>
 
-        <Modal transparent={true} visible={loading}>
-          <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
-            <Icon name='spinner' size={50} color={'#3498db'}/>
-            <Text style={{color:'black'}}>loading...</Text>
-          </View>
-        </Modal>
+      <Modal transparent={true} visible={loading}>
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Icon name="spinner" size={50} color={'#3498db'} />
+          <Text style={{color: 'black'}}>loading...</Text>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }

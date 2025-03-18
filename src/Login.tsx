@@ -1,5 +1,11 @@
 import {JSX} from 'react';
-import {StyleSheet, Text, SafeAreaView, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  SafeAreaView,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -7,6 +13,7 @@ import {View} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import {useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import api from './API';
 
 function Login(): JSX.Element {
   console.log('--Login()');
@@ -38,6 +45,30 @@ function Login(): JSX.Element {
     // 오류 처리 추가 해주기
   };
 
+  const onLogin = () => {    
+    api.login(userId, userPw)
+      .then(response => {
+        console.log('API login / data = ' + JSON.stringify(response.data[0]));
+        let {code, message} = response.data[0];
+        console.log('API login / code = ' + code + 'message = ' + message);
+
+        if (code == 0) {
+          gotoMain();
+        } else {
+          Alert.alert('오류', message, [
+            {
+              text: '확인',
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+          ]);
+        }
+      })
+      .catch(err => {
+        console.log(JSON.stringify(err));
+      });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
@@ -60,7 +91,7 @@ function Login(): JSX.Element {
         <TouchableOpacity
           style={disable ? styles.buttonDisable : styles.button}
           disabled={disable}
-          onPress={gotoMain}>
+          onPress={onLogin}>
           <Text style={styles.buttonText}>로그인</Text>
         </TouchableOpacity>
         <TouchableOpacity

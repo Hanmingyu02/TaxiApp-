@@ -1,4 +1,12 @@
 {
   "name": "taxi",
-  "displayName": "taxi"
+  "displayName": "taxi",
+  "ios": {
+    "bundleIdentifier": "com.taxi",
+    "config": {
+      "googleMaps": {
+        "apiKey": "AIzaSyD1wDTxRSQK2lkPbH9fVcrAdGGK5f8Eq8I"
+      }
+    }
+  }
 }
