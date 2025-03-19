@@ -4,6 +4,8 @@
 <dict>
 	<key>UIAppFonts</key>
 	<array>
+	<key>GooglePlacesAPIKey</key>
+	<string>AIzaSyD1wDTxRSQK2lkPbH9fVcrAdGGK5f8Eq8I</string>
   	<string>FontAwesome.ttf</string>
 	</array>
 	<key>CFBundleDevelopmentRegion</key>
